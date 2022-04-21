@@ -1,10 +1,6 @@
 import pandas as pd
 from typing import Tuple 
 
-import pydata_google_auth
-from google.cloud import bigquery
-
-
 
 class Loader:
     # TODO -> Add Logger
@@ -13,29 +9,11 @@ class Loader:
     The objective of this class is have the functions required to succesfully load
     the test data into the app
     """
-
-    def __init__(self) -> None:
-        self.client = None 
-
-    def auth(self):
-        credentials = pydata_google_auth.get_user_credentials(
-            ['https://www.googleapis.com/auth/bigquery'],
-        )
-        self.client = bigquery.Client(project='logistics-data-staging-flat', credentials=credentials)
-
     
-    def load_test_data(self, path: str, format='sql') -> pd.DataFrame:
+    def load_data(self, path: str) -> pd.DataFrame:
         # TODO -> Add Docstring
-
-        if format == 'csv':
             return pd.read_csv(path)
         
-        if format == 'sql':
-            return self.client\
-                    .query ('''
-                    SELECT * FROM `{}`
-                    '''.format(path)
-                    ).to_dataframe()
 
     @staticmethod
     def _split_variant(data: pd.DataFrame, var: str):
